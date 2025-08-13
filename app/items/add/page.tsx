@@ -1,19 +1,21 @@
 "use client"
-import Link from "next/link";
-import "./add-item.css";
+import apiService from "@/services/api-service";
+import { useRouter } from 'next/navigation';
+import { Button } from "primereact/button";
 import { InputText } from 'primereact/inputtext';
 import { useState } from 'react';
-import { Button } from "primereact/button";
-import { useRouter } from 'next/navigation';
-
+import "./add-item.css";
 
 export default function AddItem() {
     const [name, setName] = useState('');
     const [place, setPlace] = useState('');
     const router = useRouter();
+    
     function handleSubmit(e: MouseEvent): void {
         e.preventDefault();
         console.log(name, place);
+        apiService.addItem({name, place}).then(() => router.push('/items'));
+
     }
 
     return (
