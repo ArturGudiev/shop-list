@@ -1,10 +1,13 @@
 "use client"
 import Link from "next/link";
-import "./styles.css";
+import "./items-styles.css";
 import { useEffect, useState } from "react";
 import { Item } from "@/lib/prisma";
 import { Button } from "primereact/button";
-// import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+
 async function getItems(): Promise<Item[]> {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001'}/api/items`, {
@@ -24,7 +27,8 @@ async function getItems(): Promise<Item[]> {
 
 export default function Items() {
     const [items, setItems] = useState<Item[]>([]);
-    // const navigate = useNavigate();
+    const [selectedItems, setSelectedItems] = useState<Item[]>([]);
+    const router = useRouter();
     useEffect(() => {
         getItems().then(r => setItems(r))
     }, [])
@@ -36,45 +40,23 @@ export default function Items() {
 
     return (
         <div style={{ margin: '2rem 2rem 0 2rem' }}>
-            <div>Items</div>
-            <ul>
-                {items.map(el => <li key={el.id}>{el.name} {el.place}</li>)}
-            </ul>
-            <Link
-                style={{ marginTop: '2rem', display: 'block' }}
-                href="/items/add"
-            >Add item</Link>
+            <DataTable
+                dataKey="id"
+                value={items}
+                tableStyle={{ minWidth: '50rem' }}
+                selectionMode="multiple"
+                selection={selectedItems} onSelectionChange={(e) => setSelectedItems(e.value as Item[])}
+            >
+                <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+                <Column field="name" header="Name"></Column>
+                <Column field="place" header="Place"></Column>
+            </DataTable>
 
-            <table style={{ marginTop: '1rem' }}>
-                <caption>Items table</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Place</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    {items.map(el => (
-                        <tr key={el.id}>
-                            <td>{el.name}</td>
-                            <td>{el.place}</td>
-                        </tr>
-
-                    ))}
-
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colSpan={3}>Quarter total</td>
-                        <td>{items.length}</td>
-                    </tr>
-                </tfoot>
-            </table>
-
-            <Button 
-            // onClick={() => navigate('items')} 
-            label="Add item(s)" />
+            <Button
+                className="mt-8"
+                id="add-items-button"
+                onClick={(e) => {e.preventDefault(); router.push('/items/add')}}
+                label="Add item(s)" />
         </div>
     );
 }

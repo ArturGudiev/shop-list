@@ -1,3 +1,18 @@
+#form-wrapper {
+  margin: 2rem;
+}
+#return-button {
+  margin-left: 2rem;
+}
+
+#buttons-wrapper {
+  margin-top: 2rem;
+}
+
+.input-label {
+  margin-right: 2rem;
+}
+
 /* Add Item page styles */
 .add-item-container {
   min-height: 100vh;
