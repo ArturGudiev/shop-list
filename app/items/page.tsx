@@ -1,14 +1,15 @@
 "use client"
-import Link from "next/link";
-import "./items-styles.css";
-import { useEffect, useState } from "react";
 import { Item } from "@/lib/prisma";
-import { Button } from "primereact/button";
-import { useRouter } from 'next/navigation';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Toolbar } from "primereact/toolbar";
 import apiService from "@/services/api-service";
+import { ItemWithoutId } from "@/types/modified-types";
+import { useRouter } from 'next/navigation';
+import { Button } from "primereact/button";
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { Toolbar } from "primereact/toolbar";
+import React, { useEffect, useState } from "react";
+import AddItemDialog from "./add-item-dialog";
+import "./items-styles.css";
 
 async function getItems(): Promise<Item[]> {
     try {
@@ -27,17 +28,26 @@ async function getItems(): Promise<Item[]> {
     }
 }
 
+const emptyItem = {
+    name: '',
+    place: '',
+};
+
+
 export default function Items() {
     const [items, setItems] = useState<Item[]>([]);
     const [selectedItems, setSelectedItems] = useState<Item[]>([]);
-    const [item, setItem] = useState<Partial<Item>>(null); // TODO 
     const [submitted, setSubmitted] = useState(false);
+
+    const [item, setItem] = useState<ItemWithoutId>(emptyItem); // TODO 
+    // const [submitted, setSubmitted] = useState(false);
     const [productDialog, setProductDialog] = useState(false);
 
-    let emptyItem = {
-        id: null,
-        name: '',
-        place: '',
+
+
+    const hideDialog = () => {
+        setSubmitted(false);
+        setProductDialog(false);
     };
 
     const openNew = () => {
@@ -70,16 +80,25 @@ export default function Items() {
     const startToolbarTemplate = () => {
         return (
             <div className="flex flex-wrap gap-2">
-                <Button label="New" icon="pi pi-plus" severity="success"  />
+                <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} />
                 <Button label="Delete" icon="pi pi-trash" onClick={onDeleteSelected} severity="danger" />
             </div>
         );
     };
 
     const endToolbarTemplate = () => {
-        return <Button label="Export" icon="pi pi-upload" className="p-button-help"  />;
+        return <Button label="Export" icon="pi pi-upload" className="p-button-help" />;
     };
-    return (
+
+    const productDialogFooter = (
+        // onClick={hideDialog}
+        // onClick={saveProduct}
+        <React.Fragment>
+            <Button label="Cancel" icon="pi pi-times" outlined />
+            <Button label="Save" icon="pi pi-check" />
+        </React.Fragment>
+    );
+    return (<>
         <div style={{ margin: '2rem 2rem 0 2rem' }}>
             <Toolbar className="mb-4" start={startToolbarTemplate} end={endToolbarTemplate}></Toolbar>
             <DataTable
@@ -97,8 +116,14 @@ export default function Items() {
             <Button
                 className="mt-8"
                 id="add-items-button"
-                onClick={(e) => {e.preventDefault(); router.push('/items/add')}}
+                onClick={(e) => { e.preventDefault(); router.push('/items/add') }}
                 label="Add item(s)" />
+
+
+
         </div>
+
+        <AddItemDialog visible={productDialog} setVisible={setProductDialog} setForm={setItem} ></AddItemDialog>
+    </>
     );
 }
