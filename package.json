@@ -12,8 +12,11 @@
     "@neondatabase/serverless": "^1.0.1",
     "@prisma/client": "^6.14.0",
     "next": "15.4.6",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.9.6",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-transition-group": "^4.4.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

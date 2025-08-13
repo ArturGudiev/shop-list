@@ -3,7 +3,8 @@ import Link from "next/link";
 import "./styles.css";
 import { useEffect, useState } from "react";
 import { Item } from "@/lib/prisma";
-
+import { Button } from "primereact/button";
+// import { useNavigate } from 'react-router-dom';
 async function getItems(): Promise<Item[]> {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001'}/api/items`, {
@@ -23,6 +24,7 @@ async function getItems(): Promise<Item[]> {
 
 export default function Items() {
     const [items, setItems] = useState<Item[]>([]);
+    // const navigate = useNavigate();
     useEffect(() => {
         getItems().then(r => setItems(r))
     }, [])
@@ -43,32 +45,36 @@ export default function Items() {
                 href="/items/add"
             >Add item</Link>
 
-<table style={{marginTop: '1rem'}}>
-    <caption>Items table</caption>
-    <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Place</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      {items.map(el => (
-        <tr key={el.id}>
-            <td>{el.name}</td>
-            <td>{el.place}</td>
-        </tr>
-    
-    ))}
+            <table style={{ marginTop: '1rem' }}>
+                <caption>Items table</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Place</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-    </tbody>
-    <tfoot>
-      <tr>
-        <td colSpan={3}>Quarter total</td>
-        <td>{items.length}</td>
-      </tr>
-    </tfoot>
-  </table>
+                    {items.map(el => (
+                        <tr key={el.id}>
+                            <td>{el.name}</td>
+                            <td>{el.place}</td>
+                        </tr>
+
+                    ))}
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colSpan={3}>Quarter total</td>
+                        <td>{items.length}</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <Button 
+            // onClick={() => navigate('items')} 
+            label="Add item(s)" />
         </div>
     );
 }
