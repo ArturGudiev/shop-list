@@ -42,6 +42,33 @@ export default function Items() {
                 style={{ marginTop: '2rem', display: 'block' }}
                 href="/items/add"
             >Add item</Link>
+
+<table style={{marginTop: '1rem'}}>
+    <caption>Items table</caption>
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Place</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {items.map(el => (
+        <tr key={el.id}>
+            <td>{el.name}</td>
+            <td>{el.place}</td>
+        </tr>
+    
+    ))}
+
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colSpan={3}>Quarter total</td>
+        <td>{items.length}</td>
+      </tr>
+    </tfoot>
+  </table>
         </div>
     );
 }
