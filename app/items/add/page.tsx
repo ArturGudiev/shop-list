@@ -11,7 +11,7 @@ export default function AddItem() {
     const [place, setPlace] = useState('');
     const router = useRouter();
     
-    function handleSubmit(e: MouseEvent): void {
+    function handleSubmit(e: React.MouseEvent<HTMLButtonElement>): void {
         e.preventDefault();
         console.log(name, place);
         apiService.addItem({name, place}).then(() => router.push('/items'));

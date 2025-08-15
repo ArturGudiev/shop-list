@@ -13,7 +13,7 @@ const emptyItem = {
     place: '',
 };
 
-export default function AddItemDialog({ visible, setVisible, setForm, refreshItems }: {
+export default function AddItemDialog({ visible, setVisible, refreshItems }: {
     visible: boolean,
     setForm: React.Dispatch<React.SetStateAction<ItemWithoutId>>,
     setVisible: React.Dispatch<React.SetStateAction<boolean>>,
@@ -21,9 +21,8 @@ export default function AddItemDialog({ visible, setVisible, setForm, refreshIte
 }) {
     const [name, setName] = useState('');
     const [place, setPlace] = useState('');
-    const [item, setItem] = useState<Partial<ItemWithoutId>>(emptyItem); // TODO 
-    const [submitted, setSubmitted] = useState(false);
-    const router = useRouter();
+    const [item, ] = useState<Partial<ItemWithoutId>>(emptyItem); // TODO 
+    const [, setSubmitted] = useState(false);
     const nameInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -46,14 +45,6 @@ export default function AddItemDialog({ visible, setVisible, setForm, refreshIte
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [])
 
-    function handleSubmit(e: MouseEvent): void {
-        e.preventDefault();
-        console.log(name, place);
-        apiService.addItem({ name, place }).then(() => {
-            setVisible(false);
-            router.push('/items');
-        });
-    }
 
     const hideDialog = () => {
         setSubmitted(false);

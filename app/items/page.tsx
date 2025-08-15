@@ -37,15 +37,10 @@ const emptyItem = {
 export default function Items() {
     const [items, setItems] = useState<Item[]>([]);
     const [selectedItems, setSelectedItems] = useState<Item[]>([]);
-    const [submitted, setSubmitted] = useState(false);
+    const [, setSubmitted] = useState(false);
 
-    const [item, setItem] = useState<ItemWithoutId>(emptyItem); // TODO 
+    const [, setItem] = useState<ItemWithoutId>(emptyItem); // TODO 
     const [productDialog, setProductDialog] = useState(false);
-
-    const hideDialog = () => {
-        setSubmitted(false);
-        setProductDialog(false);
-    };
 
     const openNew = () => {
         setItem(emptyItem);
@@ -85,8 +80,7 @@ export default function Items() {
     // fetch("/api/hello")
     //     .then(r => r.json())
 
-    const leftToolbarTemplate = <><Button label="Hello" /></>
-    const rightToolbarTemplate = <><Button label="Hello" /></>
+   
     function onDeleteSelected() {
         console.log(selectedItems);
         if (selectedItems.length > 0) {
@@ -97,11 +91,6 @@ export default function Items() {
     function onCheckboxFocus() {
         const a = document.querySelector('.p-checkbox-input') as HTMLInputElement | null;
         a?.focus();
-    }
-
-    function deleteSelectedItems() {
-        console.log('Here');
-        apiService.deleteItems(selectedItems.map(el => el.id)).then(() => refreshItems());
     }
 
     const startToolbarTemplate = () => {
