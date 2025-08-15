@@ -6,7 +6,7 @@ import { InputText } from 'primereact/inputtext';
 import { useState } from 'react';
 import "./add-item.css";
 
-export default function AddItem({showButtons}: {showButtons: boolean} = {showButtons: true}) {
+export default function AddItem() {
     const [name, setName] = useState('');
     const [place, setPlace] = useState('');
     const router = useRouter();
@@ -35,8 +35,8 @@ export default function AddItem({showButtons}: {showButtons: boolean} = {showBut
                     />
                 </div>
                 <div id="buttons-wrapper">
-                { showButtons && <Button onClick={e => handleSubmit(e)} label="Submit" />}
-                { showButtons && <Button id="return-button" onClick={(e) => {e.preventDefault(); router.push('/items')}} label="Return to items" />}
+                 <Button onClick={e => handleSubmit(e)} label="Submit" />
+                <Button id="return-button" onClick={(e) => {e.preventDefault(); router.push('/items')}} label="Return to items" />
                 </div>
 
                 {/* {message && <p style={{ marginTop: 12 }}>{message}</p>} */}

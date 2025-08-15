@@ -40,10 +40,7 @@ export default function Items() {
     const [submitted, setSubmitted] = useState(false);
 
     const [item, setItem] = useState<ItemWithoutId>(emptyItem); // TODO 
-    // const [submitted, setSubmitted] = useState(false);
     const [productDialog, setProductDialog] = useState(false);
-
-
 
     const hideDialog = () => {
         setSubmitted(false);
@@ -64,9 +61,29 @@ export default function Items() {
         refreshItems();
     }, [])
 
-    fetch("/api/hello")
-        .then(r => r.json())
-        .then(data => console.log('11111', data));
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.altKey && e.key === 'a') {
+                e.preventDefault();
+                openNew();
+            }
+            if (e.altKey && e.key === 's') {
+                console.log('Here')
+                e.preventDefault();
+                onCheckboxFocus();
+            }
+            if (e.altKey && e.key === 'Delete') {
+                e.preventDefault();
+                onDeleteSelected();
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [selectedItems, items])
+
+    // fetch("/api/hello")
+    //     .then(r => r.json())
 
     const leftToolbarTemplate = <><Button label="Hello" /></>
     const rightToolbarTemplate = <><Button label="Hello" /></>
@@ -75,6 +92,16 @@ export default function Items() {
         if (selectedItems.length > 0) {
             apiService.deleteItems(selectedItems.map(el => el.id)).then(() => refreshItems());
         }
+    }
+
+    function onCheckboxFocus() {
+        const a = document.querySelector('.p-checkbox-input') as HTMLInputElement | null;
+        a?.focus();
+    }
+
+    function deleteSelectedItems() {
+        console.log('Here');
+        apiService.deleteItems(selectedItems.map(el => el.id)).then(() => refreshItems());
     }
 
     const startToolbarTemplate = () => {
@@ -90,14 +117,7 @@ export default function Items() {
         return <Button label="Export" icon="pi pi-upload" className="p-button-help" />;
     };
 
-    const productDialogFooter = (
-        // onClick={hideDialog}
-        // onClick={saveProduct}
-        <React.Fragment>
-            <Button label="Cancel" icon="pi pi-times" outlined />
-            <Button label="Save" icon="pi pi-check" />
-        </React.Fragment>
-    );
+    const footer = `In total there are ${items ? items.length : 0} items to buy.`;
     return (<>
         <div style={{ margin: '2rem 2rem 0 2rem' }}>
             <Toolbar className="mb-4" start={startToolbarTemplate} end={endToolbarTemplate}></Toolbar>
@@ -107,10 +127,11 @@ export default function Items() {
                 tableStyle={{ minWidth: '50rem' }}
                 selectionMode="multiple"
                 selection={selectedItems} onSelectionChange={(e) => setSelectedItems(e.value as Item[])}
+                footer={footer}
             >
                 <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                <Column field="name" header="Name"></Column>
-                <Column field="place" header="Place"></Column>
+                <Column field="name" sortable header="Name"></Column>
+                <Column field="place" sortable header="Place"></Column>
             </DataTable>
 
             <Button
@@ -123,7 +144,12 @@ export default function Items() {
 
         </div>
 
-        <AddItemDialog visible={productDialog} setVisible={setProductDialog} setForm={setItem} ></AddItemDialog>
+        <AddItemDialog
+            visible={productDialog}
+            setVisible={setProductDialog}
+            setForm={setItem}
+            refreshItems={refreshItems}
+        ></AddItemDialog>
     </>
     );
 }
