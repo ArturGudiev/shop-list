@@ -1,29 +1,11 @@
 import Image from "next/image";
-// import { prisma } from '../lib/prisma'
 import Link from "next/link";
+import SignIn from "./components/sign-in";
+import UserMenu from "./components/user-menu";
 
 export default async function Home() {
-  try {
-    // Create a temp item
-    // await prisma.temp.create({ data: { comment: 'hello' } })
+ 
 
-    // read all
-    // const all = await prisma.temp.findMany()
-
-    // find one
-    // const item = await prisma.temp.findUnique({ where: { id: 1 } })
-    // const items = await prisma.item.findMany();
-    // console.log('All items to buy', items);
-    fetch("/api/hello")
-      .then(r => r.json())
-      .then(data => console.log(data));
-
-
-    // console.log('All items:', all);
-    // console.log('First item:', item);
-  } catch (error) {
-    console.error('Prisma error:', error);
-  }
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
@@ -62,6 +44,9 @@ export default async function Home() {
             Deploy now
           </Link>
 
+          <SignIn />
+          <UserMenu />
+
           <Link
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
             href="/items"
@@ -76,6 +61,7 @@ export default async function Home() {
             />
             Items
           </Link>
+
 
           <a
             className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"

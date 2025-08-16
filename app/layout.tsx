@@ -6,7 +6,7 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css'; // Theme
 import 'primereact/resources/primereact.min.css'; // Core CSS
 import 'primeicons/primeicons.css'; // Icons
 import { PrimeReactProvider } from 'primereact/api';
-;
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,10 +33,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          <PrimeReactProvider>
-            {children}
-          </PrimeReactProvider>
-
+          <SessionProvider>
+            <PrimeReactProvider>
+              {children}
+            </PrimeReactProvider>
+          </SessionProvider>
       </body>
     </html>
   );
