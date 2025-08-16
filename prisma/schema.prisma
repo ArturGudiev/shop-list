@@ -25,3 +25,11 @@ model Item {
   name      String
   place     String?
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  login     String
+  password  String
+  name      String?
+  surname   String?
+}
