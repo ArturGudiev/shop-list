@@ -10,6 +10,7 @@ import { ItemWithoutId } from "@/types/modified-types";
 const emptyItem = {
     name: '',
     place: '',
+    category: '',
 };
 
 export default function AddItemDialog({ visible, setVisible, refreshItems }: {
@@ -20,6 +21,7 @@ export default function AddItemDialog({ visible, setVisible, refreshItems }: {
 }) {
     const [name, setName] = useState('');
     const [place, setPlace] = useState('');
+    const [category, setCategory] = useState('');
     const [item, ] = useState<Partial<ItemWithoutId>>(emptyItem); // TODO 
     const [, setSubmitted] = useState(false);
     const nameInputRef = useRef<HTMLInputElement>(null);
@@ -28,6 +30,7 @@ export default function AddItemDialog({ visible, setVisible, refreshItems }: {
         nameInputRef.current?.focus();
         setName(item.name || '');
         setPlace(item.place || '');
+        setCategory(item.category || '');
     }, [visible]);
 
     useEffect(() => {
@@ -51,11 +54,16 @@ export default function AddItemDialog({ visible, setVisible, refreshItems }: {
     };
 
     function saveProduct() {
-        console.log(name, place);
-        apiService.addItem({ name, place }).then(() => {
-            setVisible(false);
-            refreshItems();
-        });
+        console.log(name, place, category);
+        apiService.addItem({ name, place, category: category || undefined })
+            .then(() => {
+                setVisible(false);
+                refreshItems();
+            })
+            .catch((error) => {
+                console.error('Error adding item:', error);
+                alert(`Failed to add item: ${error.message || 'Unknown error'}`);
+            });
     }
 
     const productDialogFooter = (
@@ -94,6 +102,13 @@ export default function AddItemDialog({ visible, setVisible, refreshItems }: {
                         <InputText
                             value={place}
                             onChange={(e) => setPlace(e.target.value)}
+                        />
+                    </div>
+                    <div style={{ marginBottom: 12 }}>
+                        <label className="input-label">Category</label>
+                        <InputText
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
                         />
                     </div>
                     <div id="buttons-wrapper">

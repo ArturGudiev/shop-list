@@ -13,7 +13,7 @@ import "./items-styles.css";
 
 async function getItems(): Promise<Item[]> {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001'}/api/items`, {
+        const response = await fetch('/api/items', {
             cache: 'no-store'
         });
 
@@ -31,6 +31,7 @@ async function getItems(): Promise<Item[]> {
 const emptyItem = {
     name: '',
     place: '',
+    category: '',
 };
 
 
@@ -103,7 +104,7 @@ export default function Items() {
     };
 
     const endToolbarTemplate = () => {
-        return <Button label="Export" icon="pi pi-upload" className="p-button-help" />;
+        return <div></div>;
     };
 
     const footer = `In total there are ${items ? items.length : 0} items to buy.`;
@@ -121,15 +122,8 @@ export default function Items() {
                 <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
                 <Column field="name" sortable header="Name"></Column>
                 <Column field="place" sortable header="Place"></Column>
+                <Column field="category" sortable header="Category"></Column>
             </DataTable>
-
-            <Button
-                className="mt-8"
-                id="add-items-button"
-                onClick={(e) => { e.preventDefault(); router.push('/items/add') }}
-                label="Add item(s)" />
-
-
 
         </div>
 

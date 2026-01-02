@@ -18,6 +18,12 @@ class ApiService {
             },
             body: JSON.stringify(obj)
         });
+        
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({ error: 'Unknown error' }));
+            throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+        }
+        
         return res.json();
     }
 

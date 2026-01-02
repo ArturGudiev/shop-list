@@ -9,12 +9,13 @@ import "./add-item.css";
 export default function AddItem() {
     const [name, setName] = useState('');
     const [place, setPlace] = useState('');
+    const [category, setCategory] = useState('');
     const router = useRouter();
     
     function handleSubmit(e: React.MouseEvent<HTMLButtonElement>): void {
         e.preventDefault();
-        console.log(name, place);
-        apiService.addItem({name, place}).then(() => router.push('/items'));
+        console.log(name, place, category);
+        apiService.addItem({name, place, category: category || undefined}).then(() => router.push('/items'));
     }
 
     return (
@@ -32,6 +33,13 @@ export default function AddItem() {
                     <InputText
                         value={place}
                         onChange={(e) => setPlace(e.target.value)}
+                    />
+                </div>
+                <div  style={{ marginBottom: 12 }}>
+                    <label className="input-label">Category</label>
+                    <InputText
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
                     />
                 </div>
                 <div id="buttons-wrapper">
