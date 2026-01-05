@@ -7,16 +7,17 @@ export default function UserMenu() {
     if (!session?.user) return null
     console.log(session.user);
     return (
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <img
-                src={session.user.image || ''}
-                alt="Profile"
-                style={{ width: 32, height: 32, borderRadius: '50%' }}
-            />
-            <span>{session.user.name}</span>
-            <button onClick={() => signOut()}>Sign out</button>
-            <div>{session.user.name}</div>
-        </div>
+      <div>BBBBBBBB</div>
+        // <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        //     <img
+        //         src={session.user.image || ''}
+        //         alt="Profile"
+        //         style={{ width: 32, height: 32, borderRadius: '50%' }}
+        //     />
+        //     <div>User Menu Component</div>
+        //     <span>{session.user.name}</span>
+        //     <button onClick={() => signOut()}>Sign out</button>
+        //     <div>{session.user.name}</div>
+        // </div>
     )
 }

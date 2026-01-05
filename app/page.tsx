@@ -2,9 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import SignIn from "./components/sign-in";
 import UserMenu from "./components/user-menu";
+import LogoutButton from "./components/logout-button";
+import SessionDebug from "./components/session-debug";
+import { auth } from "@/auth";
 
 export default async function Home() {
- 
+  const session = await auth();
+  console.log('🔍 Server-side session check:', {
+    hasSession: !!session,
+    hasUser: !!session?.user,
+    sessionKeys: session ? Object.keys(session) : [],
+    userKeys: session?.user ? Object.keys(session.user) : [],
+    sessionData: session
+  });
+  
+  const loginStatus = session?.user 
+    ? (session.user.name || session.user.id || "Logged in")
+    : "Not logged in";
 
 
   return (
@@ -18,6 +32,12 @@ export default async function Home() {
           height={38}
           priority
         />
+        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+          <p className="font-mono text-sm text-gray-800 dark:text-gray-200">
+            <span className="font-semibold">Server Status:</span> {loginStatus}
+          </p>
+        </div>
+        <SessionDebug />
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
             Shop items
@@ -43,24 +63,51 @@ export default async function Home() {
             />
             Deploy now
           </Link>
+          {!session?.user && (
+            <SignIn />
+          )}
+          {session?.user && (
+            <LogoutButton />
+          )}
 
-          <SignIn />
-          <UserMenu />
+          <div style={{border: '1px solid red'}}>
+            AAAA
+            <UserMenu />
+          </div>
 
-          <Link
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="/items"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Items
-          </Link>
+          {session?.user && (
+            <>
+              <Link
+                className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
+                href="/items"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  className="dark:invert"
+                  src="/vercel.svg"
+                  alt="Vercel logomark"
+                  width={20}
+                  height={20}
+                />
+                Items
+              </Link>
+
+              <Link
+                className="rounded-full border pborder-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
+                href="/map"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  className="dark:invert"
+                  src="/vercel.svg"
+                  alt="Vercel logomark"
+                  width={20}
+                  height={20}
+                />
+                Map
+              </Link>
+            </>
+          )}
 
 
           <a
