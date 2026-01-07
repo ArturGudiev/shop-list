@@ -1,0 +1,13 @@
+.loginGrid {
+    border: 3px solid blue;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px; /* optional */
+}
+
+.loginGrid > div {
+    background: #ddd;
+    padding: 20px;
+    text-align: center;
+}

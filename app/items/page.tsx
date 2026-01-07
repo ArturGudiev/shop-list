@@ -18,12 +18,19 @@ async function getItems(): Promise<Item[]> {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to fetch items');
+            const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+            const errorMessage = errorData.error || `HTTP ${response.status}: ${response.statusText}`;
+            console.error('Error fetching items:', errorMessage);
+            throw new Error(errorMessage);
         }
 
         return await response.json();
     } catch (error) {
         console.error('Error fetching items:', error);
+        // Return empty array on error, but log the actual error
+        if (error instanceof Error) {
+            console.error('Error details:', error.message);
+        }
         return [];
     }
 }
@@ -32,6 +39,7 @@ const emptyItem = {
     name: '',
     place: '',
     category: '',
+    userId: null,
 };
 
 

@@ -25,6 +25,7 @@ model Item {
   name      String
   place     String?
   category  String?
+  userId    Int?     // GitHub user ID (optional for migration)
 }
 
 model User {

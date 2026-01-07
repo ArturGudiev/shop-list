@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "migrate:update-userid": "tsx scripts/update-items-userid.ts",
+    "fix:userid": "tsx scripts/fix-database-userid.ts",
+    "convert:userid-to-int": "tsx scripts/convert-userid-to-int.ts",
+    "apply:userid-migration": "tsx scripts/apply-userid-migration.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",
@@ -33,6 +37,7 @@
     "eslint-config-next": "^16.1.1",
     "prisma": "^6.14.0",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

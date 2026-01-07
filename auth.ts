@@ -9,14 +9,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   })],
   callbacks: {
     async jwt({ token, account, profile, user }) {
-      console.log('🔵 JWT CALLBACK FIRED:', {
-        hasToken: !!token,
-        hasAccount: !!account,
-        hasProfile: !!profile,
-        hasUser: !!user,
-        tokenKeys: Object.keys(token || {}),
-      });
-      // During initial sign-in, preserve all user data
       if (account && profile) {
         token.githubId = profile.id
         token.email = (profile.email as string | undefined) || user?.email || token.email
@@ -26,15 +18,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token
     },
     async session({ session, token }) {
-      console.log('🟢 SESSION CALLBACK FIRED:', {
-        hasSession: !!session,
-        hasSessionUser: !!session?.user,
-        hasToken: !!token,
-        tokenKeys: Object.keys(token || {}),
-        tokenData: token,
-        sessionBefore: session,
-      });
-      
       // Ensure session.user exists - create it if it doesn't
       if (!session.user) {
         session.user = {} as any;
@@ -54,16 +37,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.image = token.picture as string;
       }
       
-      console.log('🟢 SESSION AFTER UPDATE:', {
-        sessionUser: session.user,
-        sessionKeys: Object.keys(session),
-      });
-      
       return session
     },
   },
 })
-
-// export const { handlers, signIn, signOut, auth } = NextAuth({
-//   providers: [],
-// })

@@ -6,11 +6,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Dialog } from "primereact/dialog";
 import React from "react";
 import { ItemWithoutId } from "@/types/modified-types";
+import { useSession } from "next-auth/react";
 
 const emptyItem = {
     name: '',
     place: '',
     category: '',
+    userId: 0,
 };
 
 export default function AddItemDialog({ visible, setVisible, refreshItems }: {
@@ -19,10 +21,11 @@ export default function AddItemDialog({ visible, setVisible, refreshItems }: {
     setVisible: React.Dispatch<React.SetStateAction<boolean>>,
     refreshItems: () => void,
 }) {
+    const { data: session } = useSession();
     const [name, setName] = useState('');
     const [place, setPlace] = useState('');
     const [category, setCategory] = useState('');
-    const [item, ] = useState<Partial<ItemWithoutId>>(emptyItem); // TODO 
+    const [item, ] = useState<Partial<ItemWithoutId>>(emptyItem);
     const [, setSubmitted] = useState(false);
     const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -54,8 +57,18 @@ export default function AddItemDialog({ visible, setVisible, refreshItems }: {
     };
 
     function saveProduct() {
-        console.log(name, place, category);
-        apiService.addItem({ name, place, category: category || undefined })
+        const userId = session?.user?.id;
+        if (!userId) {
+            alert('You must be logged in to add items');
+            return;
+        }
+
+        apiService.addItem({ 
+            name, 
+            place, 
+            category: category || undefined,
+            userId: Number(userId)
+        })
             .then(() => {
                 setVisible(false);
                 refreshItems();

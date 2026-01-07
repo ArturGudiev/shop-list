@@ -5,16 +5,10 @@ import UserMenu from "./components/user-menu";
 import LogoutButton from "./components/logout-button";
 import SessionDebug from "./components/session-debug";
 import { auth } from "@/auth";
+import styles from "./page.module.css";
 
 export default async function Home() {
   const session = await auth();
-  console.log('🔍 Server-side session check:', {
-    hasSession: !!session,
-    hasUser: !!session?.user,
-    sessionKeys: session ? Object.keys(session) : [],
-    userKeys: session?.user ? Object.keys(session.user) : [],
-    sessionData: session
-  });
   
   const loginStatus = session?.user 
     ? (session.user.name || session.user.id || "Logged in")
@@ -32,12 +26,24 @@ export default async function Home() {
           height={38}
           priority
         />
-        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
-          <p className="font-mono text-sm text-gray-800 dark:text-gray-200">
-            <span className="font-semibold">Server Status:</span> {loginStatus}
-          </p>
+
+
+        <div className={styles.loginGrid}>
+          <div>1</div>
+          <div>2</div>
+          <div>3</div>
+          <div>4</div>
         </div>
-        <SessionDebug />
+        <div style={{border: '1px solid red'}}>
+
+          <div
+            className="mb-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+            <p className="font-mono text-sm text-gray-800 dark:text-gray-200">
+              <span className="font-semibold">Server Status:</span> {loginStatus}
+            </p>
+          </div>
+          <SessionDebug />
+        </div>
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
             Shop items
@@ -70,8 +76,8 @@ export default async function Home() {
             <LogoutButton />
           )}
 
-          <div style={{border: '1px solid red'}}>
-            AAAA
+          <div style={{border: '1px solid green'}}>
+            AAAAAAAAAAAAAAAAAAAA
             <UserMenu />
           </div>
 
